@@ -8,8 +8,9 @@ const productsRoutes = require('./routes/api/products.routes')
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
-
 require('dotenv').config()
+require('./config/passport')
+
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())

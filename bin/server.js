@@ -11,7 +11,6 @@ const conntection = mongoose.connect(uriDb, {
   useUnifiedTopology: true,
   useFindAndModify: false,
 })
-
 conntection
   .then(() => {
     app.listen(PORT, () => {
