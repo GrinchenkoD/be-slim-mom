@@ -27,9 +27,9 @@ const userSchema = new Schema({
   products: [
     {
       date: { type: String, required: [true, 'Date is required'] },
-      product: { type: String, required: [true, 'Product is required'] },
+      title: { type: String, required: [true, 'Product is required'] },
       weight: { type: Number, required: [true, 'Weight is required'] },
-      calories: { type: Number },
+      calories: { type: Number, default: 0 },
     },
   ],
   owner: {

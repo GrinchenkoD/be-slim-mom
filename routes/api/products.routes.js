@@ -4,6 +4,8 @@ const Product = require('../../service/schemas/products')
 const auth = require('../../service/middlewares/auth.middleware')
 const {
   productController,
+  addProductController,
+  deleteProductController,
 } = require('../../service/routes-services/products/products.controllers')
 //* Public route
 
@@ -12,8 +14,8 @@ router.post('/public/daily', productController)
 //* Private route
 router.get('/:productName')
 router.post('/private/daily', auth, productController)
-router.post('/add')
-router.post('/delete')
+router.post('/add', auth, addProductController)
+router.post('/delete', auth, deleteProductController)
 router.get('/day-info/:date')
 
 //! TEST
