@@ -14,10 +14,19 @@ const findProductsByBlood = async bloodType => {
   return Array.from(new Set(productsCategories))
 }
 
-const findUserAndUpdateProducts = (param, products) => {
-  return User.findOneAndUpdate(param, products, { new: true })
+const findUserAndUpdateDate = (param, dates) => {
+  return User.findOneAndUpdate(param, dates, { new: true })
 }
 const findProduct = title => {
   return Product.findOne(title)
 }
-module.exports = { findProductsByBlood, findUserAndUpdateProducts, findProduct }
+
+const findDay = date => {
+  return User.findOne(date)
+}
+module.exports = {
+  findProductsByBlood,
+  findUserAndUpdateDate,
+  findProduct,
+  findDay,
+}
