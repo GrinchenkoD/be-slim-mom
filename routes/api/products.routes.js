@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Product = require('../../service/schemas/products')
-const auth = require('../../service/routes-services/auth/auth.methods')
+const auth = require('../../service/middlewares/auth.middleware')
 
 //* Public route
 
