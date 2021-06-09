@@ -17,23 +17,23 @@ const productController = async (req, res, next) => {
         161 -
         10 * (currentWeight - desiredWeight),
     )
-    const forbidenProducts = await findProductsByBlood(bloodType)
+    const forbidenCategories = await findProductsByBlood(bloodType)
     if (req.user && req.user.token) {
       const { token } = req.user
       const user = await findUserByToken(token)
       await user.updateOne({
         dailyCalories,
-        forbidenProducts: [...forbidenProducts],
+        forbidenCategories: [...forbidenCategories],
       })
       return res.status(200).json({
         dailyCalories,
-        forbidenProducts,
+        forbidenCategories,
       })
     }
 
     res.status(200).json({
       dailyCalories,
-      forbidenProducts,
+      forbidenCategories,
     })
   } catch (error) {
     res.status(400).json({ message: error.message })

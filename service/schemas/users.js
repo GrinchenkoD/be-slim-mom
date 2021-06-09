@@ -23,7 +23,7 @@ const userSchema = new Schema({
     type: Number,
     default: 0,
   },
-  forbidenProducts: [String],
+  forbidenCategories: [String],
   products: [
     {
       date: { type: String, required: [true, 'Date is required'] },
