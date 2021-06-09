@@ -21,7 +21,9 @@ const userSchema = new Schema({
   },
   dailyCalories: {
     type: Number,
+    default: 0,
   },
+  forbidenProducts: [String],
   products: [
     {
       date: { type: String, required: [true, 'Date is required'] },

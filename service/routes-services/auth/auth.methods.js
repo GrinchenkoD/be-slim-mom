@@ -5,6 +5,10 @@ const findUser = login => {
   return UserSchema.findOne({ login })
 }
 
+const findUserByToken = token => {
+  return UserSchema.findOne({ token })
+}
+
 const findUserAndUpdate = (User, param, token) => {
   return User.findOneAndUpdate(param, { token }, { new: true })
 }
@@ -16,4 +20,5 @@ module.exports = {
   findUserAndUpdate,
   findUserByParam,
   findUser,
+  findUserByToken,
 }
