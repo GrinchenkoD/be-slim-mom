@@ -5,20 +5,15 @@ const findUser = login => {
   return UserSchema.findOne({ login })
 }
 
-const findUserAndUpdate = (User, login, token) => {
-  return User.findOneAndUpdate({ login: login }, { token }, { new: true })
+const findUserAndUpdate = (User, param, token) => {
+  return User.findOneAndUpdate(param, { token }, { new: true })
 }
-const findUserByLogin = (User, login) => {
-  return User.findOne({ login })
-}
-
-const findByIdAndUpdate = (User, id) => {
-  return User.findOneAndUpdate({ _id: id }, { token: null }, { new: true })
+const findUserByParam = (User, param) => {
+  return User.findOne(param)
 }
 
 module.exports = {
   findUserAndUpdate,
-  findUserByLogin,
-  findByIdAndUpdate,
+  findUserByParam,
   findUser,
 }
