@@ -1,20 +1,21 @@
 // ! business logic
-
 const { createNewUserSchema } = require('../../helpers/createNewUserSchema')
-const { findUser } = require('./auth.methods')
+require('dotenv').config()
+const {
+  findUser,
+  findUserAndUpdate,
+  findUserByLogin,
+  findByIdAndUpdate,
+} = require('./auth.methods')
 const UserSchema = require('../../schemas/users.js')
 const bCrypt = require('bcryptjs')
 const loginValidation = require('../../helpers/Joi/login.schema')
 const User = require('../../schemas/users')
-const {
-  findUserAndUpdate,
-  findUserByLogin,
-  findByIdAndUpdate,
-} = require('../auth/auth.controller')
 const validatePassword = require('../../helpers/passwordHelpers/passwordValidation')
 const secret = process.env.SECRET
 const jwt = require('jsonwebtoken')
 
+// ? REGISTRATION //
 const createNewUser = async (req, res, next) => {
   const { value, error } = createNewUserSchema.validate(req.body)
   const { name, login, password } = value
@@ -50,6 +51,8 @@ const createNewUser = async (req, res, next) => {
   }
 }
 
+// ? LOGIN //
+
 const loginController = async (req, res, next) => {
   const { value, error } = loginValidation.validate(req.body)
   if (error) {
@@ -57,8 +60,9 @@ const loginController = async (req, res, next) => {
     return
   }
   const { password, login } = value
+  const loginLowerCase = login.toLowerCase()
   try {
-    const user = findUserByLogin(User, login)
+    const user = await findUserByLogin(User, loginLowerCase)
 
     if (user === null) {
       return res.status(404).json({ message: 'User not found' })
@@ -78,7 +82,7 @@ const loginController = async (req, res, next) => {
       login: user.login,
     }
     const token = jwt.sign(payload, secret, { expiresIn: '1h' })
-    findUserAndUpdate(User, ({ _id: payload.id }, { ...req.body, token }))
+    await findUserAndUpdate(User, loginLowerCase, token)
     res.json({
       status: 'success',
       code: 200,
@@ -91,13 +95,15 @@ const loginController = async (req, res, next) => {
   }
 }
 
-const logOutController = (req, res, next) => {
-  const id = req.user.id
+// ? LOGOUT //
+
+const logOutController = async (req, res, next) => {
+  const { _id } = req.user
   try {
-    findByIdAndUpdate(User, id)
+    await findByIdAndUpdate(User, _id)
+    res.status(200).json({ message: 'Logout success' })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
 }
-
 module.exports = { loginController, logOutController, createNewUser }

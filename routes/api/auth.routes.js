@@ -10,6 +10,6 @@ router.post('/registration', createNewUser)
 
 const auth = require('../../service/middlewares/auth.middleware.js')
 router.post('/login', loginController)
-router.post('logout', auth, logOutController)
+router.post('/logout', auth, logOutController)
 
 module.exports = router

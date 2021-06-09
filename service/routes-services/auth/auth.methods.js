@@ -5,15 +5,15 @@ const findUser = login => {
   return UserSchema.findOne({ login })
 }
 
-const findUserAndUpdate = (User, token) => {
-  return User.findOneAndUpdate(token, { new: true })
+const findUserAndUpdate = (User, login, token) => {
+  return User.findOneAndUpdate({ login: login }, { token }, { new: true })
 }
 const findUserByLogin = (User, login) => {
   return User.findOne({ login })
 }
 
-const findByIdAndUpdate = async (User, id) => {
-  await User.findByIdAndUpdate({ _id: id }, { token: null }, { new: true })
+const findByIdAndUpdate = (User, id) => {
+  return User.findOneAndUpdate({ _id: id }, { token: null }, { new: true })
 }
 
 module.exports = {
