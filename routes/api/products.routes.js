@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Product = require('../../service/schemas/products')
 const auth = require('../../service/middlewares/auth.middleware')
-
+const productController = require('../../service/routes-services/products/products.controllers')
 //* Public route
 
-router.post('/public/daily')
+router.post('/public/daily', productController)
 
 //* Private route
 router.get('/:productName')

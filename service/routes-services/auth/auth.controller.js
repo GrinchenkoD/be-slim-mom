@@ -4,8 +4,7 @@ require('dotenv').config()
 const {
   findUser,
   findUserAndUpdate,
-  findUserByLogin,
-  findByIdAndUpdate,
+  findUserByParam,
 } = require('./auth.methods')
 const UserSchema = require('../../schemas/users.js')
 const bCrypt = require('bcryptjs')
@@ -62,7 +61,7 @@ const loginController = async (req, res, next) => {
   const { password, login } = value
   const loginLowerCase = login.toLowerCase()
   try {
-    const user = await findUserByLogin(User, loginLowerCase)
+    const user = await findUserByParam(User, { login })
 
     if (user === null) {
       return res.status(404).json({ message: 'User not found' })
@@ -82,7 +81,7 @@ const loginController = async (req, res, next) => {
       login: user.login,
     }
     const token = jwt.sign(payload, secret, { expiresIn: '1h' })
-    await findUserAndUpdate(User, loginLowerCase, token)
+    await findUserAndUpdate(User, { login: loginLowerCase }, token)
     res.json({
       status: 'success',
       code: 200,
@@ -100,7 +99,7 @@ const loginController = async (req, res, next) => {
 const logOutController = async (req, res, next) => {
   const { _id } = req.user
   try {
-    await findByIdAndUpdate(User, _id)
+    await findUserAndUpdate(User, { _id: _id }, null)
     res.status(200).json({ message: 'Logout success' })
   } catch (error) {
     res.status(400).json({ message: error.message })
