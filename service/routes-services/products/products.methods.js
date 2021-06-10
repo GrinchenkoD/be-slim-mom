@@ -1,4 +1,5 @@
 const Product = require('../../schemas/products')
+const User = require('../../schemas/users')
 
 const findProductsByBlood = async bloodType => {
   const findProducts = await Product.find({
@@ -13,4 +14,16 @@ const findProductsByBlood = async bloodType => {
   return Array.from(new Set(productsCategories))
 }
 
-module.exports = findProductsByBlood
+const findUserAndUpdateDate = (param, dates) => {
+  return User.findOneAndUpdate(param, dates, { new: true })
+}
+const findProduct = title => {
+  return Product.findOne(title)
+}
+
+
+module.exports = {
+  findProductsByBlood,
+  findUserAndUpdateDate,
+  findProduct,
+}

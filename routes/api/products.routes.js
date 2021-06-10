@@ -4,6 +4,9 @@ const Product = require('../../service/schemas/products')
 const auth = require('../../service/middlewares/auth.middleware')
 const {
   productController,
+  addProductController,
+  deleteProductController,
+  getDayInfoConroller,
 } = require('../../service/routes-services/products/products.controllers')
 //* Public route
 
@@ -12,9 +15,9 @@ router.post('/public/daily', productController)
 //* Private route
 router.get('/:productName')
 router.post('/private/daily', auth, productController)
-router.post('/add')
-router.post('/delete')
-router.get('/day-info/:date')
+router.post('/add', auth, addProductController)
+router.patch('/delete', auth, deleteProductController)
+router.get('/day-info/:date', auth, getDayInfoConroller)
 
 //! TEST
 router.get('/', async (req, res) => {
