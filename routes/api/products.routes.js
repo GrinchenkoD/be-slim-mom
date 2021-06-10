@@ -7,13 +7,14 @@ const {
   addProductController,
   deleteProductController,
   getDayInfoConroller,
+  getProductsNameController,
 } = require('../../service/routes-services/products/products.controllers')
 //* Public route
 
 router.post('/public/daily', productController)
 
 //* Private route
-router.get('/:productName')
+router.get('/:productName', getProductsNameController)
 router.post('/private/daily', auth, productController)
 router.post('/add', auth, addProductController)
 router.patch('/delete', auth, deleteProductController)
