@@ -9,8 +9,11 @@ const {
   findUserAndUpdateDate,
   findProduct,
   findProductsByBlood,
+  findProductsName,
 } = require('../products/products.methods')
 const { nanoid } = require('nanoid')
+
+// ? DAILY PRODUCTS(PRIVATE/PUBLIC)
 const productController = async (req, res, next) => {
   const { value, error } = productsDailySchema.validate(req.body)
   const { height, age, currentWeight, desiredWeight, bloodType } = value
@@ -44,6 +47,17 @@ const productController = async (req, res, next) => {
       dailyCalories,
       forbidenCategories,
     })
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
+// ? GET PRODUCTS NAME
+
+const getProductsNameController = async (req, res, next) => {
+  const searchQuerry = req.params.productName
+  try {
+    await findProductsName(searchQuerry)
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
@@ -183,4 +197,5 @@ module.exports = {
   addProductController,
   deleteProductController,
   getDayInfoConroller,
+  getProductsNameController,
 }

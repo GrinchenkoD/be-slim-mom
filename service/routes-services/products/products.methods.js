@@ -20,10 +20,17 @@ const findUserAndUpdateDate = (param, dates) => {
 const findProduct = title => {
   return Product.findOne(title)
 }
-
+const findProductsName = async searchQuerry => {
+  const result = await Product.find({
+    'title.ru': { $elemMatch: { $in: [searchQuerry] } },
+  })
+  console.log(searchQuerry)
+  console.log(result)
+}
 
 module.exports = {
   findProductsByBlood,
   findUserAndUpdateDate,
   findProduct,
+  findProductsName,
 }
