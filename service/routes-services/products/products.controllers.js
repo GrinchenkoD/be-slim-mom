@@ -53,11 +53,13 @@ const productController = async (req, res, next) => {
 }
 
 // ? GET PRODUCTS NAME
-
 const getProductsNameController = async (req, res, next) => {
   const searchQuerry = req.params.productName
   try {
-    await findProductsName(searchQuerry)
+    const searchProducts = await findProductsName(searchQuerry)
+    res.status(200).json({
+      products: searchProducts,
+    })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }

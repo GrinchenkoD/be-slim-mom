@@ -21,11 +21,12 @@ const findProduct = title => {
   return Product.findOne(title)
 }
 const findProductsName = async searchQuerry => {
+  const regex = new RegExp(searchQuerry, 'gi')
   const result = await Product.find({
-    'title.ru': { $elemMatch: { $in: [searchQuerry] } },
+    'title.ru': { $regex: regex },
   })
-  console.log(searchQuerry)
-  console.log(result)
+
+  return result.map(product => product.title.ru)
 }
 
 module.exports = {
