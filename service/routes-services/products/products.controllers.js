@@ -78,6 +78,7 @@ const addProductController = async (req, res, next) => {
           },
         ],
       }
+      // -- //
       const newDates = [...dates, newDate]
       await findUserAndUpdateDate({ _id }, { dates: newDates })
       return res.json({
@@ -142,6 +143,7 @@ const deleteProductController = async (req, res, next) => {
       await findUserAndUpdateDate({ _id }, { dates: filteredDates })
       return res.status(200).json({ message: 'Product deleted' })
     }
+    // - //
     const updatedCaloriesReceived = caloriesReceived - productToDelete.calories
     const updatedDay = {
       id,
