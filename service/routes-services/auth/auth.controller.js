@@ -1,5 +1,5 @@
 // ! business logic
-const { createNewUserSchema } = require('../../helpers/createNewUserSchema')
+const { createNewUserSchema } = require('../../helpers/Joi/createNewUserSchema')
 require('dotenv').config()
 const {
   findUser,

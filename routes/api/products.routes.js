@@ -6,6 +6,7 @@ const {
   productController,
   addProductController,
   deleteProductController,
+  getDayInfoConroller,
 } = require('../../service/routes-services/products/products.controllers')
 //* Public route
 
@@ -16,7 +17,7 @@ router.get('/:productName')
 router.post('/private/daily', auth, productController)
 router.post('/add', auth, addProductController)
 router.patch('/delete', auth, deleteProductController)
-router.get('/day-info/:date')
+router.get('/day-info/:date', auth, getDayInfoConroller)
 
 //! TEST
 router.get('/', async (req, res) => {

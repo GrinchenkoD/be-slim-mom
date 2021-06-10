@@ -2,6 +2,7 @@ const {
   productsDailySchema,
   addProductValidation,
   deleteProductValidation,
+  dayInfoValidation,
 } = require('../../helpers/Joi/products.schemas')
 const { findUserByToken } = require('../auth/auth.methods')
 const {
@@ -72,7 +73,7 @@ const addProductController = async (req, res, next) => {
             title,
             weight,
             category: product.categories[0],
-            calories: product.calories,
+            calories: caloriesFromWeight,
             id,
           },
         ],
@@ -93,7 +94,7 @@ const addProductController = async (req, res, next) => {
         title,
         weight,
         category: product.categories[0],
-        calories: product.calories,
+        calories: caloriesFromWeight,
         id,
       },
     ]
@@ -130,7 +131,7 @@ const deleteProductController = async (req, res, next) => {
     const { caloriesReceived } = day
     const productToDelete = day.products.find(prod => prod.id === id)
     if (productToDelete === undefined) {
-      res.status(404).json({ error: 'Product was not found' })
+      return res.status(404).json({ error: 'Product was not found' })
     }
     const filteredProducts = day.products.filter(
       prod => prod.id.toString() !== id,
@@ -151,8 +152,27 @@ const deleteProductController = async (req, res, next) => {
   }
 }
 
+const getDayInfoConroller = async (req, res, next) => {
+  const { value, error } = dayInfoValidation.validate(req.params)
+  if (error) {
+    return res.status(400).json({ message: error.message })
+  }
+  try {
+    const { token } = req.user
+    const { dates } = await findUserByToken(token)
+    const date = dates.find(day => day.date === value.date)
+    if (date === undefined) {
+      return res.status(404).json({ error: 'Date was not found' })
+    }
+    res.status(200).send(date)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
   productController,
   addProductController,
   deleteProductController,
+  getDayInfoConroller,
 }
