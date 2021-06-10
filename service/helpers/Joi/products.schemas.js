@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('joi').extend(require('@joi/date'))
 
 const productsDailySchema = Joi.object({
   height: Joi.number().required(),
@@ -8,4 +8,18 @@ const productsDailySchema = Joi.object({
   bloodType: Joi.number().min(1).max(4).required(),
 })
 
-module.exports = productsDailySchema
+const addProductValidation = Joi.object({
+  title: Joi.string().required(),
+  weight: Joi.number().min(1).required(),
+  date: Joi.date().format('DD.MM.YYYY').raw(),
+})
+
+const deleteProductValidation = Joi.object({
+  date: Joi.date().format('DD.MM.YYYY').raw(),
+  id: Joi.string().required(),
+})
+module.exports = {
+  productsDailySchema,
+  addProductValidation,
+  deleteProductValidation,
+}

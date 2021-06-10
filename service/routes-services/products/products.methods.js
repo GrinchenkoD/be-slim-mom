@@ -21,12 +21,9 @@ const findProduct = title => {
   return Product.findOne(title)
 }
 
-const findDay = date => {
-  return User.findOne(date)
-}
+
 module.exports = {
   findProductsByBlood,
   findUserAndUpdateDate,
   findProduct,
-  findDay,
 }

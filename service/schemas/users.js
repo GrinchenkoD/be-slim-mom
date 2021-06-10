@@ -24,11 +24,13 @@ const userSchema = new Schema({
     default: 0,
   },
   forbidenCategories: [String],
-  products: [
+  dates: [
     {
       date: { type: String, required: [true, 'Date is required'] },
+      caloriesReceived: { type: Number, default: 0 },
       products: [
         {
+          id: { type: String, required: [true, 'Title is required'] },
           title: { type: String, required: [true, 'Title is required'] },
           category: {
             type: String,
@@ -38,10 +40,12 @@ const userSchema = new Schema({
             type: Number,
             required: [true, 'Weight is required'],
           },
-          calories: { type: Number, required: true },
+          calories: {
+            type: Number,
+            required: [true, 'Calories are required'],
+          },
         },
       ],
-      caloriesReceived: { type: Number, default: 0 },
     },
   ],
   owner: {

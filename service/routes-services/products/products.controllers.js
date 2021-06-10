@@ -1,13 +1,15 @@
-const productsDailySchema = require('../../helpers/Joi/products.schemas')
+const {
+  productsDailySchema,
+  addProductValidation,
+  deleteProductValidation,
+} = require('../../helpers/Joi/products.schemas')
 const { findUserByToken } = require('../auth/auth.methods')
-const { addProductValidation } = require('../../helpers/Joi/products.schema')
 const {
   findUserAndUpdateDate,
   findProduct,
   findProductsByBlood,
-  findDay,
 } = require('../products/products.methods')
-
+const { nanoid } = require('nanoid')
 const productController = async (req, res, next) => {
   const { value, error } = productsDailySchema.validate(req.body)
   const { height, age, currentWeight, desiredWeight, bloodType } = value
@@ -53,58 +55,101 @@ const addProductController = async (req, res, next) => {
     return res.status(400).json({ message: error.message })
   }
   const { title, weight, date } = value
-  const { _id, products, dailyCalories } = req.user
+  const { _id, token } = req.user
   try {
-    const day = await findDay({ 'dates.date': date })
+    const { dates } = await findUserByToken(token)
+    const day = dates.find(day => day.date === date)
     const product = await findProduct({ 'title.ru': title })
     const caloriesFromWeight = parseInt((product.calories / 100) * weight)
-    if (day === null) {
-      await findUserAndUpdateDate(
-        { _id },
-        {
-          dates: [
-            {
-              date: date,
-              caloriesReceived: caloriesFromWeight,
-              products: [
-                {
-                  title,
-                  weight,
-                  category: product.categories[0],
-                  calories: product.calories,
-                },
-              ],
-            },
-          ],
-        },
-      )
+    const id = nanoid()
+    //* IF NEW DAY //
+    if (!day) {
+      const newDate = {
+        date,
+        caloriesReceived: caloriesFromWeight,
+        products: [
+          {
+            title,
+            weight,
+            category: product.categories[0],
+            calories: product.calories,
+            id,
+          },
+        ],
+      }
+      const newDates = [...dates, newDate]
+      await findUserAndUpdateDate({ _id }, { dates: newDates })
       return res.json({
         calories: caloriesFromWeight,
         weight: weight,
         title: title,
-        _id,
+        id,
       })
     }
-    console.log(day)
-    const newCalories = +day.caloriesReceived + caloriesFromWeight
-    console.log(typeof day.caloriesReceived)
-    // console.log(newCalories)
-    // const product = await findProduct({ 'title.ru': title })
-    // const caloriesFromWeight = (product.calories / 100) * weight
-    // const newCalories = +dailyCalories + caloriesFromWeight
-    // const UpdatedProducts = [...products, { title, weight, date }]
-    // await findUserAndUpdateProducts(
-    //   { _id },
-    //   { dailyCalories: newCalories, products: UpdatedProducts },
-    // )
-    // res.json({ calories: caloriesFromWeight, weight: weight, title: title, _id })
+    const updatedCaloriesReceived = +day.caloriesReceived + caloriesFromWeight
+    const UpdatedProducts = [
+      ...day.products,
+      {
+        title,
+        weight,
+        category: product.categories[0],
+        calories: product.calories,
+        id,
+      },
+    ]
+    const updatedDay = {
+      date,
+      caloriesReceived: updatedCaloriesReceived,
+      products: UpdatedProducts,
+    }
+    const filtredDates = dates.filter(day => day.date !== date)
+    const newDates = [...filtredDates, updatedDay]
+    await findUserAndUpdateDate({ _id }, { dates: newDates })
+    return res.json({
+      calories: caloriesFromWeight,
+      weight: weight,
+      title: title,
+      id,
+    })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
 }
 
 // ? DELETE PRODUCT //
-const deleteProductController = (req, res, next) => {}
+const deleteProductController = async (req, res, next) => {
+  const { value, error } = deleteProductValidation.validate(req.body)
+  if (error) {
+    return res.status(400).json({ message: error.message })
+  }
+  const { id, date } = value
+  const { token, _id } = req.user
+  try {
+    const { dates } = await findUserByToken(token)
+    const day = dates.find(day => day.date === date)
+    const { caloriesReceived } = day
+    const productToDelete = day.products.find(prod => prod.id === id)
+    if (productToDelete === undefined) {
+      res.status(404).json({ error: 'Product was not found' })
+    }
+    const filteredProducts = day.products.filter(
+      prod => prod.id.toString() !== id,
+    )
+    const updatedCaloriesReceived = caloriesReceived - productToDelete.calories
+    const updatedDay = {
+      id,
+      date,
+      caloriesReceived: updatedCaloriesReceived,
+      products: filteredProducts,
+    }
+    const filtredDates = dates.filter(day => day.date !== date)
+    const newDates = [...filtredDates, updatedDay]
+    await findUserAndUpdateDate({ _id }, { dates: newDates })
+    res.status(200).json({ message: 'Product deleted' })
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
 
 module.exports = {
   productController,

@@ -15,7 +15,7 @@ router.post('/public/daily', productController)
 router.get('/:productName')
 router.post('/private/daily', auth, productController)
 router.post('/add', auth, addProductController)
-router.post('/delete', auth, deleteProductController)
+router.patch('/delete', auth, deleteProductController)
 router.get('/day-info/:date')
 
 //! TEST
