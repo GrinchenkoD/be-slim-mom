@@ -136,6 +136,12 @@ const deleteProductController = async (req, res, next) => {
     const filteredProducts = day.products.filter(
       prod => prod.id.toString() !== id,
     )
+    // * DELETE DAY IF IT HAS NO PRODUCTS //
+    if (filteredProducts.length === 0) {
+      const filteredDates = dates.filter(item => item.date !== date)
+      await findUserAndUpdateDate({ _id }, { dates: filteredDates })
+      return res.status(200).json({ message: 'Product deleted' })
+    }
     const updatedCaloriesReceived = caloriesReceived - productToDelete.calories
     const updatedDay = {
       id,
