@@ -385,7 +385,7 @@
           "token": {
             "type": "string"
           },
-          "login": { "type": "string" }
+          "login": { "type": "string", "example": "Kolya" }
         }
       },
       "ProductNameResponse": {
