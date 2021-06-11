@@ -157,7 +157,7 @@ const deleteProductController = async (req, res, next) => {
     if (filteredProducts.length === 0) {
       const filteredDates = dates.filter(item => item.date !== date)
       await findUserAndUpdateDate({ _id }, { dates: filteredDates })
-      return res.status(200).json({ message: 'Product deleted' })
+      return res.status(204).json({ message: 'Product deleted' })
     }
     // - //
     const updatedCaloriesReceived = caloriesReceived - productToDelete.calories
@@ -170,7 +170,7 @@ const deleteProductController = async (req, res, next) => {
     const filtredDates = dates.filter(day => day.date !== date)
     const newDates = [...filtredDates, updatedDay]
     await findUserAndUpdateDate({ _id }, { dates: newDates })
-    res.status(200).json({ message: 'Product deleted' })
+    res.status(204).json({ message: 'Product deleted' })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
@@ -185,11 +185,25 @@ const getDayInfoConroller = async (req, res, next) => {
   try {
     const { token } = req.user
     const { dates } = await findUserByToken(token)
-    const date = dates.find(day => day.date === value.date)
-    if (date === undefined) {
+    const foundDate = dates.find(day => day.date === value.date)
+    if (foundDate === undefined) {
       return res.status(404).json({ error: 'Date was not found' })
     }
-    res.status(200).send(date)
+    const { caloriesReceived, date, products } = foundDate
+    const mapedProducts = products.map(
+      ({ title, weight, category, calories, id }) => ({
+        title,
+        weight,
+        category,
+        calories,
+        id,
+      }),
+    )
+    res.status(200).json({
+      caloriesReceived,
+      date,
+      products: mapedProducts,
+    })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
