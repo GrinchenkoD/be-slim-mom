@@ -289,7 +289,7 @@
     "/products/day-info/{date}": {
       "get": {
         "tags": ["Products"],
-        "summary": "Delete product to a specific day of user",
+        "summary": "Get user's day info",
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
