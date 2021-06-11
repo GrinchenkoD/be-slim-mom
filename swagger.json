@@ -8,7 +8,7 @@
   "produces": ["application/json"],
   "servers": [
     {
-      "url": "http://localhost:80"
+      "url": "https://slim-mom.herokuapp.com"
     }
   ],
   "tags": [
