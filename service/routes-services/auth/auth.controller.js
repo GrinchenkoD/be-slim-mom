@@ -25,7 +25,7 @@ const createNewUser = async (req, res, next) => {
   }
   if (user) {
     return res
-      .status(401)
+      .status(409)
       .json({ message: `Such login(${login}) already exists` })
   }
   try {
@@ -70,8 +70,7 @@ const loginController = async (req, res, next) => {
     const passwordCheck = validatePassword(password, user.password)
 
     if (!user || !passwordCheck) {
-      res.status(401).json({
-        code: 401,
+      res.status(403).json({
         message: 'Email or password is wrong',
       })
       return
@@ -82,9 +81,7 @@ const loginController = async (req, res, next) => {
     }
     const token = jwt.sign(payload, secret, { expiresIn: '1h' })
     await findUserAndUpdate(User, { login: loginLowerCase }, token)
-    res.json({
-      status: 'success',
-      code: 200,
+    res.status(202).json({
       data: {
         token,
       },
@@ -100,7 +97,7 @@ const logOutController = async (req, res, next) => {
   const { _id } = req.user
   try {
     await findUserAndUpdate(User, { _id: _id }, null)
-    res.status(200).json({ message: 'Logout success' })
+    res.status(204).json({ message: 'Logout success' })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
