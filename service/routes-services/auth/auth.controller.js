@@ -18,11 +18,11 @@ const jwt = require('jsonwebtoken')
 const createNewUser = async (req, res, next) => {
   const { value, error } = createNewUserSchema.validate(req.body)
   const { name, login, password } = value
-  const loginLowerCase = login.toLowerCase()
-  const user = await findUser(loginLowerCase)
   if (error) {
     return res.status(400).json({ message: error.message })
   }
+  const loginLowerCase = login.toLowerCase()
+  const user = await findUser(loginLowerCase)
   if (user) {
     return res
       .status(409)
@@ -67,11 +67,11 @@ const loginController = async (req, res, next) => {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    const passwordCheck = validatePassword(password, user.password)
+    const passwordCheck = await validatePassword(password, user.password)
 
     if (!user || !passwordCheck) {
       res.status(403).json({
-        message: 'Email or password is wrong',
+        message: 'Login or password is wrong',
       })
       return
     }
@@ -82,9 +82,7 @@ const loginController = async (req, res, next) => {
     const token = jwt.sign(payload, secret, { expiresIn: '1h' })
     await findUserAndUpdate(User, { login: loginLowerCase }, token)
     res.status(202).json({
-      data: {
-        token,
-      },
+      token,
     })
   } catch (error) {
     res.status(400).json({ message: error.message })
