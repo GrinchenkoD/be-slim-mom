@@ -384,7 +384,8 @@
         "properties": {
           "token": {
             "token": "string"
-          }
+          },
+          "login": "string"
         }
       },
       "ProductNameResponse": {
