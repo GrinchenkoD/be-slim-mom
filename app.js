@@ -2,7 +2,6 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const authRoutes = require('./routes/api/auth.routes.js')
-const usersRoutes = require('./routes/api/users.routes.js')
 const productsRoutes = require('./routes/api/products.routes')
 
 const app = express()
@@ -16,7 +15,6 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/auth', authRoutes)
-app.use('/users', usersRoutes)
 app.use('/products', productsRoutes)
 
 app.use((req, res) => {

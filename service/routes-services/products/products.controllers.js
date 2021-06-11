@@ -97,7 +97,7 @@ const addProductController = async (req, res, next) => {
       // -- //
       const newDates = [...dates, newDate]
       await findUserAndUpdateDate({ _id }, { dates: newDates })
-      return res.json({
+      return res.status(200).json({
         calories: caloriesFromWeight,
         weight: weight,
         title: title,
@@ -123,7 +123,7 @@ const addProductController = async (req, res, next) => {
     const filtredDates = dates.filter(day => day.date !== date)
     const newDates = [...filtredDates, updatedDay]
     await findUserAndUpdateDate({ _id }, { dates: newDates })
-    return res.json({
+    return res.status(200).json({
       calories: caloriesFromWeight,
       weight: weight,
       title: title,
@@ -176,6 +176,7 @@ const deleteProductController = async (req, res, next) => {
   }
 }
 
+// ? GET DAY INFO //
 const getDayInfoConroller = async (req, res, next) => {
   const { value, error } = dayInfoValidation.validate(req.params)
   if (error) {
