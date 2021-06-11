@@ -8,7 +8,7 @@
   "produces": ["application/json"],
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://slim-mom.herokuapp.com"
     }
   ],
   "tags": [
@@ -289,7 +289,7 @@
     "/products/day-info/{date}": {
       "get": {
         "tags": ["Products"],
-        "summary": "Delete product to a specific day of user",
+        "summary": "Get user's day info",
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
