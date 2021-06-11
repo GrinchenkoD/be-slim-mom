@@ -1,0 +1,224 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Be-slim-mom-api",
+    "description": "API documentation for GoIT project 'Be-slim-mom'. [Backend github repository](https://github.com/GrinchenkoD/be-slim-mom)"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Products",
+      "description": "Products endpoints"
+    }
+  ],
+  "paths": {
+    "/auth/registration": {
+      "post": {
+        "test": 123,
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "409": {
+            "description": "Such login already exist"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "test": 123,
+        "tags": ["Auth"],
+        "summary": "User loginization",
+        "parameters": [],
+        "requestBody": {
+          "description": "Loginization's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Login or password is wrong"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "test": 123,
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/products/{productName}": {
+      "get": {
+        "test": 123,
+        "schema": {
+          "type": "string",
+          "enum": "[ru]",
+          "default": "ru"
+        },
+        "tags": ["Products"],
+        "summary": "User logout",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "productName",
+            "type": "string",
+            "description": "Product's name",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "password", "login"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Kolya"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          },
+          "login": {
+            "type": "string",
+            "description": "User's login",
+            "example": "kolya23"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Kolya"
+          },
+          "login": {
+            "type": "string",
+            "description": "User's login",
+            "example": "kolya23"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["login", "password"],
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "User's login",
+            "example": "kolya23"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "token": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
