@@ -383,9 +383,9 @@
         "type": "object",
         "properties": {
           "token": {
-            "token": "string"
+            "type": "string"
           },
-          "login": "string"
+          "login": { "type": "string" }
         }
       },
       "ProductNameResponse": {
