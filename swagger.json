@@ -118,12 +118,6 @@
     },
     "/products/{productName}": {
       "get": {
-        "test": 123,
-        "schema": {
-          "type": "string",
-          "enum": "[ru]",
-          "default": "ru"
-        },
         "tags": ["Products"],
         "summary": "User logout",
         "security": [{ "Bearer": [] }],
@@ -137,14 +131,18 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Successful operation"
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductNameResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
-          },
-          "404": {
-            "description": "User not found"
           }
         }
       }
@@ -210,6 +208,12 @@
           "token": {
             "token": "string"
           }
+        }
+      },
+      "ProductNameResponse": {
+        "type": "array",
+        "items": {
+          "type": "string"
         }
       }
     },
