@@ -187,9 +187,12 @@ const getDayInfoConroller = async (req, res, next) => {
     const { dates } = await findUserByToken(token)
     const foundDate = dates.find(day => day.date === value.date)
     if (foundDate === undefined) {
-      return res.status(404).json({ error: 'Date was not found' })
+      return res
+        .status(200)
+        .json({ date: value.date, caloriesReceived: 0, products: [] })
     }
     const { caloriesReceived, date, products } = foundDate
+
     const mapedProducts = products.map(
       ({ title, weight, category, calories, id }) => ({
         title,
