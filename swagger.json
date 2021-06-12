@@ -122,7 +122,7 @@
     "/products/{productName}": {
       "get": {
         "tags": ["Products"],
-        "summary": "Find procuts by name",
+        "summary": "Find products by name",
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
