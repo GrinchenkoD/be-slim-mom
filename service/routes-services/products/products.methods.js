@@ -14,9 +14,72 @@ const findProductsByBlood = async bloodType => {
   return Array.from(new Set(productsCategories))
 }
 
-const findUserAndUpdateDate = (param, dates) => {
-  return User.findOneAndUpdate(param, dates, { new: true })
+const findUserAndAddDate = (
+  param,
+  date,
+  caloriesFromWeight,
+  title,
+  weight,
+  category,
+  id,
+) => {
+  return User.findOneAndUpdate(
+    param,
+    {
+      $push: {
+        dates: {
+          date,
+          caloriesReceived: caloriesFromWeight,
+          products: [
+            {
+              title,
+              weight,
+              category,
+              calories: caloriesFromWeight,
+              id,
+            },
+          ],
+        },
+      },
+    },
+    { new: true },
+  )
 }
+const findUserAndAddProduct = (
+  { _id, date },
+  updatedCaloriesReceived,
+  title,
+  weight,
+  category,
+  calories,
+  id,
+) => {
+  return User.findOneAndUpdate(
+    { _id, 'dates.date': date },
+    {
+      $set: { 'dates.$.caloriesReceived': updatedCaloriesReceived },
+      $push: { 'dates.$.products': { title, weight, category, calories, id } },
+    },
+  )
+}
+
+const findUserAndRemoveProduct = (
+  { _id, date },
+  updatedCaloriesReceived,
+  id,
+  filteredProducts,
+) => {
+  return User.findOneAndUpdate(
+    { _id, 'dates.date': date },
+    {
+      $set: {
+        'dates.$.caloriesReceived': updatedCaloriesReceived,
+        'dates.$.products': filteredProducts,
+      },
+    },
+  )
+}
+
 const findProduct = title => {
   return Product.findOne(title)
 }
@@ -31,7 +94,9 @@ const findProductsName = async searchQuerry => {
 
 module.exports = {
   findProductsByBlood,
-  findUserAndUpdateDate,
+  findUserAndAddDate,
+  findUserAndAddProduct,
   findProduct,
   findProductsName,
+  findUserAndRemoveProduct,
 }

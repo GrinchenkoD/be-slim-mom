@@ -22,4 +22,3 @@ passport.use(
     }
   }),
 )
-
