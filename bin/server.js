@@ -4,14 +4,14 @@ const PORT = process.env.PORT || 3000
 
 const uriDb = process.env.DB_HOST
 const mongoose = require('mongoose')
-const conntection = mongoose.connect(uriDb, {
+const connection = mongoose.connect(uriDb, {
   promiseLibrary: global.Promise,
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
 })
-conntection
+connection
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}`)
