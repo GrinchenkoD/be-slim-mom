@@ -382,7 +382,8 @@
           "token": {
             "type": "string"
           },
-          "login": { "type": "string", "example": "Kolya" }
+          "login": { "type": "string", "example": "Kolya" },
+          "dailyCalories": { "type": "Number", "example": 0 }
         }
       },
       "ProductNameResponse": {
