@@ -62,7 +62,6 @@ const loginController = async (req, res, next) => {
   const loginLowerCase = login.toLowerCase()
   try {
     const user = await findUserByParam(User, { login })
-
     if (user === null) {
       return res.status(404).json({ message: 'User not found' })
     }
@@ -83,7 +82,8 @@ const loginController = async (req, res, next) => {
     await findUserAndUpdate(User, { login: loginLowerCase }, token)
     res.status(202).json({
       token,
-      login
+      login,
+      dailyCalories: user.dailyCalories,
     })
   } catch (error) {
     res.status(400).json({ message: error.message })
