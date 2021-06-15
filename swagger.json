@@ -385,7 +385,7 @@
           "login": { "type": "string", "example": "Kolya" },
           "dailyCalories": { "type": "Number", "example": 0 },
           "forbidenCategories": {
-            "type": "Array",
+            "type": "array",
             "items": { "type": "string", "example": "яйца" }
           }
         }
