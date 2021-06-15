@@ -383,7 +383,8 @@
             "type": "string"
           },
           "login": { "type": "string", "example": "Kolya" },
-          "dailyCalories": { "type": "Number", "example": 0 }
+          "dailyCalories": { "type": "Number", "example": 0 },
+          "forbidenCategories": { "type": "Array" }
         }
       },
       "ProductNameResponse": {
