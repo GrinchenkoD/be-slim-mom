@@ -104,6 +104,7 @@ const addProductController = async (req, res, next) => {
     weight,
     title,
     id,
+    newCalories: updatedCaloriesReceived,
   })
 }
 
@@ -132,7 +133,12 @@ const deleteProductController = async (req, res, next) => {
     id,
     filteredProducts,
   )
-  res.status(204).json({ message: 'Product deleted' })
+  res
+    .status(200)
+    .json({
+      message: 'Product deleted',
+      newCalories: updatedCaloriesReceived,
+    })
 }
 
 // ? GET DAY INFO //

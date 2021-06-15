@@ -271,8 +271,15 @@
           }
         },
         "responses": {
-          "204": {
-            "description": "Successful operation"
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsDeleteResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request (invalid request body)"
@@ -510,6 +517,10 @@
           "date": {
             "type": "string",
             "example": "17-10-2020"
+          },
+          "newCalories": {
+            "type": "number",
+            "example": "1000"
           }
         }
       },
@@ -523,6 +534,15 @@
           "date": {
             "type": "string",
             "example": "17-10-2020"
+          }
+        }
+      },
+      "ProductsDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "newCalories": {
+            "number": "string",
+            "example": "500"
           }
         }
       },
