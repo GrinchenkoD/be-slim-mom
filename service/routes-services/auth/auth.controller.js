@@ -81,6 +81,7 @@ const loginController = async (req, res, next) => {
     token,
     login,
     dailyCalories: user.dailyCalories,
+    forbidenCategories: user.forbidenCategories,
   })
 }
 
