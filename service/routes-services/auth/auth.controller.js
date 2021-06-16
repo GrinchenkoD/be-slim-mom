@@ -75,7 +75,7 @@ const loginController = async (req, res, next) => {
     id: user.id,
     login: user.login,
   }
-  const token = jwt.sign(payload, secret, { expiresIn: '1h' })
+  const token = jwt.sign(payload, secret, { expiresIn: '3h' })
   await findUserAndUpdate(User, { login: loginLowerCase }, token)
   res.status(202).json({
     token,
