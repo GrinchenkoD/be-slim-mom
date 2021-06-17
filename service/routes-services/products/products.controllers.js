@@ -86,6 +86,7 @@ const addProductController = async (req, res, next) => {
       weight,
       title,
       id,
+      newCalories: caloriesFromWeight,
     })
   }
   // -- //
