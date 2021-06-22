@@ -422,6 +422,7 @@
             "type": "array",
             "items": { "type": "string", "example": "яйца" }
           }
+
         }
       },
       "ProductNameResponse": {
