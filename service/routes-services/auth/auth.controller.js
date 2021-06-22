@@ -5,6 +5,7 @@ const {
   findUser,
   findUserAndUpdate,
   findUserByParam,
+  findUserByToken,
 } = require('./auth.methods')
 
 const UserSchema = require('../../schemas/users.js')
@@ -75,7 +76,7 @@ const loginController = async (req, res, next) => {
     id: user.id,
     login: user.login,
   }
-  const token = jwt.sign(payload, secret, { expiresIn: '1h' })
+  const token = jwt.sign(payload, secret, { expiresIn: '3h' })
   await findUserAndUpdate(User, { login: loginLowerCase }, token)
   res.status(202).json({
     token,
@@ -92,4 +93,18 @@ const logOutController = async (req, res, next) => {
   await findUserAndUpdate(User, { _id: _id }, null)
   res.status(204).json({ message: 'Logout success' })
 }
-module.exports = { loginController, logOutController, createNewUser }
+
+// ? GET CURRENT USER //
+const getCurrentUserController = async (req, res, next) => {
+  console.log(req.user)
+  const { token, login, dailyCalories, forbidenCategories } = req.user
+  res.status(200).json({ token, dailyCalories, login, forbidenCategories })
+  // const user = findUserByToken()
+}
+
+module.exports = {
+  loginController,
+  logOutController,
+  createNewUser,
+  getCurrentUserController,
+}

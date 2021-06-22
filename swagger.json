@@ -119,6 +119,33 @@
         }
       }
     },
+    "/auth/get-current-user": {
+      "get": {
+        "test": 123,
+        "tags": ["Auth"],
+        "summary": "Get user's info by token",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
     "/products/{productName}": {
       "get": {
         "tags": ["Products"],
@@ -271,8 +298,15 @@
           }
         },
         "responses": {
-          "204": {
-            "description": "Successful operation"
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsDeleteResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request (invalid request body)"
@@ -384,7 +418,11 @@
           },
           "login": { "type": "string", "example": "Kolya" },
           "dailyCalories": { "type": "Number", "example": 0 },
-          "forbidenCategories": { "type": "Array" }
+          "forbidenCategories": {
+            "type": "array",
+            "items": { "type": "string", "example": "яйца" }
+          }
+
         }
       },
       "ProductNameResponse": {
@@ -507,6 +545,10 @@
           "date": {
             "type": "string",
             "example": "17-10-2020"
+          },
+          "newCalories": {
+            "type": "number",
+            "example": "1000"
           }
         }
       },
@@ -520,6 +562,15 @@
           "date": {
             "type": "string",
             "example": "17-10-2020"
+          }
+        }
+      },
+      "ProductsDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "newCalories": {
+            "number": "string",
+            "example": "500"
           }
         }
       },
